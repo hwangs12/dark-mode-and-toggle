@@ -2,10 +2,18 @@ import React, { useState, useEffect } from "react";
 import data from "./data";
 import Article from "./Article";
 
+const getThemeItem = () => {
+	let theme = "light-theme";
+	if (localStorage.getItem("theme")) {
+		theme = localStorage.getItem("theme");
+	}
+	return theme;
+};
+
 function App() {
 	const [dati, setDati] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [screenMode, setScreenMode] = useState("dark-theme");
+	const [screenMode, setScreenMode] = useState(getThemeItem());
 
 	const handleClick = () => {
 		setScreenMode((mode) =>
@@ -17,15 +25,16 @@ function App() {
 		setLoading(true);
 		const newData = data;
 		setDati(newData);
+		localStorage.setItem("theme", screenMode);
 		setLoading(false);
-	}, []);
+	}, [screenMode]);
 
 	useEffect(() => {
 		document.documentElement.className = screenMode;
 	}, [screenMode]);
 
 	return (
-		<main className="light-theme">
+		<main>
 			<nav>
 				<div className="nav-center" onClick={handleClick}>
 					<h1>overreacted</h1>
